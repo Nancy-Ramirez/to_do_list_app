@@ -5,7 +5,7 @@
 /todo-list-app/public/storage
 /todo-list-app/storage/*.key
 /todo-list-app/storage/logs/*.log
-/todo-list-app/bootstrap/cache/
+/todo-list-app/bootstrap/cache/*
 /todo-list-app/.env
 /todo-list-app/.env.backup
 /todo-list-app/.env.example.backup
