@@ -1,0 +1,42 @@
+# Archivos y carpetas generados por Laravel (backend)
+/todo-list-app/vendor/
+/todo-list-app/node_modules/
+/todo-list-app/public/hot
+/todo-list-app/public/storage
+/todo-list-app/storage/*.key
+/todo-list-app/storage/logs/*.log
+/todo-list-app/bootstrap/cache/
+/todo-list-app/.env
+/todo-list-app/.env.backup
+/todo-list-app/.env.example.backup
+/todo-list-app/Homestead.yaml
+/todo-list-app/Homestead.json
+/todo-list-app/npm-debug.log
+/todo-list-app/yarn-error.log
+/todo-list-app/*.log
+/todo-list-app/*.sqlite
+/todo-list-app/coverage/
+/todo-list-app/tests/_output/*
+/todo-list-app/tests/_support/_generated/*
+
+# Archivos y carpetas generados por el frontend (React)
+/todo-list-frontend/node_modules/
+/todo-list-frontend/build/
+/todo-list-frontend/dist/
+/todo-list-frontend/.env
+/todo-list-frontend/.env.local
+/todo-list-frontend/.env.development.local
+/todo-list-frontend/.env.test.local
+/todo-list-frontend/.env.production.local
+/todo-list-frontend/npm-debug.log*
+/todo-list-frontend/yarn-debug.log*
+/todo-list-frontend/yarn-error.log*
+/todo-list-frontend/coverage/
+
+# Archivos de desarrollo local (comunes)
+.vscode/  # Si usas VS Code (opcional, si no quieres compartir configuraciones)
+
+# Archivos temporales (comunes)
+*.swp
+*.swo
+*~
