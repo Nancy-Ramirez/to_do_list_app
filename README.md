@@ -1,7 +1,7 @@
 # To-Do List App
 
 ## Descripción del proyecto
-**To-Do List App** es una aplicación de gestión de tareas diseñada para ayudarte a organizar tus actividades diarias de manera eficiente. Este proyecto consta de un frontend desarrollado en React con Tailwind CSS para una interfaz moderna y responsiva, y un backend en Laravel que proporciona una API robusta para gestionar las tareas. La aplicación permite crear, editar, completar y eliminar tareas, con funcionalidades como búsqueda, ordenamiento y agrupación por fechas límite (Hoy, Mañana, Esta semana, Más adelante).
+**Done!** es una aplicación de gestión de tareas diseñada para ayudarte a organizar tus actividades diarias de manera eficiente. Este proyecto consta de un frontend desarrollado en React con Tailwind CSS para una interfaz moderna y responsiva, y un backend en Laravel que proporciona una API robusta para gestionar las tareas. La aplicación permite crear, editar, completar y eliminar tareas, con funcionalidades como búsqueda, ordenamiento y agrupación por fechas límite (Hoy, Mañana, Esta semana, Más adelante).
 
 ---
 
@@ -64,7 +64,7 @@ Asegurate de que los módulos de Apache y MySQL estén corriendo.
   - `DB_DATABASE=todo_list`
   - `DB_USERNAME=root`
   - `DB_PASSWORD=`
-Ajusta DB_USERNAME y DB_PASSWORD según tu configuración de MySQL).
+- Ajusta DB_USERNAME y DB_PASSWORD según tu configuración de MySQL).
 
 #### 6. Genera la clave de la aplicación:
 `php artisan key:generate`
