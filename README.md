@@ -42,19 +42,19 @@ Clona el repositorio desde GitHub:
 
 ### 2. Configurar y ejecutar el backend
 
-#### Navega al directorio del backend:
+#### 1. Navega al directorio del backend:
 `cd todo-list-app`
 
-#### Instala las dependencias de PHP con Composer:
+#### 2. Instala las dependencias de PHP con Composer:
 `composer install`
 
-#### Copia el archivo de entorno:
+#### 3. Copia el archivo de entorno:
 `cp .env.example .env`
 
-#### Inicia XAMPP:
+#### 4. Inicia XAMPP:
 Asegurate de que los módulos de Apache y MySQL estén corriendo.
 
-#### Configura la base de datos en .env:
+#### 5. Configura la base de datos en .env:
 - Abre `phpMyAdmin` (normalmente en http://localhost/phpmyadmin).
 - Crea una base de datos llamada todo_list.
 - Edita .env con los detalles de tu base de datos.
@@ -66,15 +66,15 @@ Asegurate de que los módulos de Apache y MySQL estén corriendo.
   `DB_PASSWORD=`
 Ajusta DB_USERNAME y DB_PASSWORD según tu configuración de MySQL).
 
-#### Genera la clave de la aplicación:
+#### 6. Genera la clave de la aplicación:
 `php artisan key:generate`
 
-#### Ejecuta las migraciones:
+#### 7. Ejecuta las migraciones:
 `php artisan migrate`
 
-#### Inicia el servidor del backend:
+#### 8. Inicia el servidor del backend:
 `php artisan serve`
-El backend estará disponible en http://localhost:8000 por defecto
+El backend estará disponible en *http://localhost:8000* por defecto
 
 ### 3. Configurar y ejecutar el frontend
 
@@ -92,4 +92,6 @@ El backend estará disponible en http://localhost:8000 por defecto
 
 #### 4. Inicia el frontend
 `npm start`
-El frontend se ejecutará en http'://localhost:3000 por defecto y se conectará al backend en http://localhost:8000
+El frontend se ejecutará en *http://localhost:3000* por defecto y se conectará al backend en *http://localhost:8000*
+
+### Debes tener el backend (php artisan serve) y el frontend (npm start) corriendo al mismo tiempo en terminales separadas. 
