@@ -11,7 +11,7 @@ class TaskController extends Controller
    public function index(Request $request)
    {
     //Ordena por fecha de creación
-    $sort = $request->query('sort', 'created-at'); 
+    $sort = $request->query('sort', 'created_at'); 
 
     $query = Task::query();
 
