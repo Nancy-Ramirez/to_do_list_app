@@ -55,7 +55,7 @@
 
 #### 5. Configura la base de datos en .env:
 - Abre `phpMyAdmin` (normalmente en http://localhost/phpmyadmin).
-- Crea una base de datos llamada todo_list.
+- Crea una base de datos llamada `todo_list`.
 - Edita .env con los detalles de tu base de datos.
   - `DB_CONNECTION=mysql`
   - `DB_HOST=127.0.0.1`
