@@ -35,10 +35,9 @@
 ## Instrucciones para instalar y correr el proyecto
 
 ### 1. Clonar el repositorio
-Clona el repositorio desde GitHub:
-
-`git clone https://github.com/Nancy-Ramirez/to_do_list_app.git`
-`cd to_do_list_app `
+- Clona el repositorio desde GitHub:
+   - `git clone https://github.com/Nancy-Ramirez/to_do_list_app.git`
+   - `cd to_do_list_app `
 
 ### 2. Configurar y ejecutar el backend
 
@@ -52,7 +51,7 @@ Clona el repositorio desde GitHub:
 `cp .env.example .env`
 
 #### 4. Inicia XAMPP:
-Asegurate de que los módulos de Apache y MySQL estén corriendo.
+- Asegurate de que los módulos de Apache y MySQL estén corriendo.
 
 #### 5. Configura la base de datos en .env:
 - Abre `phpMyAdmin` (normalmente en http://localhost/phpmyadmin).
@@ -74,15 +73,15 @@ Asegurate de que los módulos de Apache y MySQL estén corriendo.
 
 #### 8. Inicia el servidor del backend:
 `php artisan serve`
-El backend estará disponible en *http://localhost:8000* por defecto
+- El backend estará disponible en *http://localhost:8000* por defecto
 
 ### 3. Configurar y ejecutar el frontend
 
 #### 1. Asegurate de tener Node.js instalado:
 - Descarga e instala desde nodejs.org si aún no lo tienes.
 - Verifica en el cmd con: 
-  `node -v`
-  `npm -v`
+  - `node -v`
+  - `npm -v`
   
 #### 2. Navega al directorio frontend
 `cd todo-list-frontend`
@@ -92,6 +91,6 @@ El backend estará disponible en *http://localhost:8000* por defecto
 
 #### 4. Inicia el frontend
 `npm start`
-El frontend se ejecutará en *http://localhost:3000* por defecto y se conectará al backend en *http://localhost:8000*
+- El frontend se ejecutará en *http://localhost:3000* por defecto y se conectará al backend en *http://localhost:8000*
 
 ### Debes tener el backend (php artisan serve) y el frontend (npm start) corriendo al mismo tiempo en terminales separadas. 
