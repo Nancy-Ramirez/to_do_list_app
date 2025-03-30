@@ -9,7 +9,7 @@ export const NavbarGeneral = () => {
           <img
             src={logo}
             alt={logoAltText}
-            className="h-10 w-auto sm:h-12 md:h-14 lg:h-16"
+            className="h-8 w-auto sm:h-8 md:h-10 lg:h-12"
           />
         </div>
       </div>
