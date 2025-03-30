@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Alert from "../components/common/Alert";
 import TaskList from "../components/TaskList/TaskList.jsx";
 import { fetchTasks, createTask } from "../services/api.js";
 import { NavbarGeneral } from "../components/common/NavbarGeneral.jsx";
@@ -24,17 +25,18 @@ const Home = () => {
     deadline: "",
     completed: false,
   });
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [alert, setAlert] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({}); // Nuevo estado para errores por campo
 
-  // Función para agrupar tareas por fecha de finalización
+  const showAlert = (type, message) => setAlert({ type, message });
+  const closeAlert = () => setAlert(null);
+
   const groupTasksByDeadline = (tasksToGroup) => {
+    // Lógica de agrupación (sin cambios)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
-
     const endOfWeek = new Date(today);
     endOfWeek.setDate(today.getDate() + 7);
 
@@ -44,53 +46,36 @@ const Home = () => {
       "Esta semana": [],
       "Más adelante": [],
     };
-
     tasksToGroup.forEach((task) => {
       const deadline = new Date(task.deadline);
       deadline.setHours(0, 0, 0, 0);
-
-      if (deadline.getTime() === today.getTime()) {
-        grouped["Hoy"].push(task);
-      } else if (deadline.getTime() === tomorrow.getTime()) {
+      if (deadline.getTime() === today.getTime()) grouped["Hoy"].push(task);
+      else if (deadline.getTime() === tomorrow.getTime())
         grouped["Mañana"].push(task);
-      } else if (deadline > tomorrow && deadline <= endOfWeek) {
+      else if (deadline > tomorrow && deadline <= endOfWeek)
         grouped["Esta semana"].push(task);
-      } else {
-        grouped["Más adelante"].push(task);
-      }
+      else grouped["Más adelante"].push(task);
     });
 
     Object.keys(grouped).forEach((group) => {
       let updatedGroup = [...grouped[group]];
-
-      switch (sortOption) {
-        case "completados-primero":
-          updatedGroup.sort(
-            (a, b) => (b.completed ? 1 : -1) - (a.completed ? 1 : -1)
-          );
-          break;
-        case "pendientes-primero":
-          updatedGroup.sort(
-            (a, b) => (a.completed ? 1 : -1) - (b.completed ? 1 : -1)
-          );
-          break;
-        case "solo-completados":
-          updatedGroup = updatedGroup.filter((task) => task.completed);
-          break;
-        case "solo-pendientes":
-          updatedGroup = updatedGroup.filter((task) => !task.completed);
-          break;
-        default:
-          break;
-      }
-
+      if (sortOption === "completados-primero")
+        updatedGroup.sort(
+          (a, b) => (b.completed ? 1 : -1) - (a.completed ? 1 : -1)
+        );
+      else if (sortOption === "pendientes-primero")
+        updatedGroup.sort(
+          (a, b) => (a.completed ? 1 : -1) - (b.completed ? 1 : -1)
+        );
+      else if (sortOption === "solo-completados")
+        updatedGroup = updatedGroup.filter((task) => task.completed);
+      else if (sortOption === "solo-pendientes")
+        updatedGroup = updatedGroup.filter((task) => !task.completed);
       grouped[group] = updatedGroup;
     });
-
     return grouped;
   };
 
-  // Cargar las tareas al montar el componente
   useEffect(() => {
     const loadTasks = async () => {
       try {
@@ -107,76 +92,63 @@ const Home = () => {
     loadTasks();
   }, []);
 
-  // Filtrar y agrupar las tareas cuando cambian el término de búsqueda, la opción de ordenamiento o las tareas
   useEffect(() => {
     let updatedTasks = [...tasks];
-
-    if (searchTerm) {
+    if (searchTerm)
       updatedTasks = updatedTasks.filter((task) =>
         task.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
-    }
-
     const grouped = groupTasksByDeadline(updatedTasks);
     setGroupedTasks(grouped);
   }, [searchTerm, sortOption, tasks]);
 
-  // Función para actualizar una tarea en la lista
-  const updateTaskInList = (updatedTask) => {
-    setTasks(
-      tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+  const updateTaskInList = (updatedTask) =>
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
     );
-  };
+  const removeTask = (id) => setTasks(tasks.filter((task) => task.id !== id));
 
-  // Función para eliminar una tarea de la lista
-  const removeTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
-  };
-
-  // Abrir el modal de creación
   const openCreateModal = () => {
     setIsCreateModalOpen(true);
-    setSuccessMessage("");
-    setErrorMessage("");
-    setNewTask({
-      title: "",
-      description: "",
-      deadline: "",
-      completed: false,
-    });
+    setNewTask({ title: "", description: "", deadline: "", completed: false });
+    setAlert(null);
+    setValidationErrors({}); // Limpiar errores al abrir
   };
 
-  // Cerrar el modal de creación
   const closeCreateModal = () => {
     setIsCreateModalOpen(false);
-    setSuccessMessage("");
-    setErrorMessage("");
+    setAlert(null);
+    setValidationErrors({}); // Limpiar errores al cerrar
   };
 
-  // Manejar cambios en los campos del formulario
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setNewTask((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+    setValidationErrors((prev) => ({ ...prev, [name]: null })); // Limpiar error del campo al editar
   };
 
-  // Crear una nueva tarea
   const handleCreateTask = async (e) => {
     e.preventDefault();
     try {
       const createdTask = await createTask(newTask);
       setTasks([...tasks, createdTask]);
-      setSuccessMessage("Tarea creada exitosamente.");
-      setErrorMessage("");
-      setTimeout(() => {
-        closeCreateModal();
-      }, 1500); // Cierra el modal después de 1.5 segundos
+      showAlert("success", "Tarea creada con éxito");
+      setValidationErrors({});
+      setTimeout(closeCreateModal, 2000);
     } catch (error) {
-      setErrorMessage("Error al crear la tarea. Intenta de nuevo.");
-      setSuccessMessage("");
-      console.error("Error al crear la tarea:", error);
+      console.log("Error completo:", error.response); // Log para depurar
+      if (error.response?.status === 422) {
+        const errors = error.response.data.errors || {};
+        console.log("Errores de validación:", errors); // Log para verificar los errores
+        setValidationErrors(errors); // Mostrar errores por campo
+        showAlert("error", "Por favor, corrige los errores en el formulario");
+      } else {
+        showAlert("error", error.message || "Error al crear la tarea");
+        console.error("Error al crear la tarea:", error);
+      }
     }
   };
 
@@ -194,11 +166,9 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <NavbarGeneral />
-      {/* Contenedor principal */}
       <div className="pt-28 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        {/* Campo de búsqueda y botones */}
+        {/* Sección de búsqueda y botones (sin cambios) */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
-          {/* Campo de búsqueda */}
           <div className="flex-1 relative">
             <input
               type="text"
@@ -209,10 +179,7 @@ const Home = () => {
             />
             <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
           </div>
-
-          {/* Botones de ordenamiento y agregar tarea */}
           <div className="flex items-center gap-3">
-            {/* Botón de ordenamiento */}
             <div className="relative">
               <button
                 onClick={() => setShowSortMenu(!showSortMenu)}
@@ -270,8 +237,6 @@ const Home = () => {
                 </div>
               )}
             </div>
-
-            {/* Botón para agregar tarea */}
             <button
               onClick={openCreateModal}
               className="p-2 bg-purple-500 text-white rounded-lg hover:bg-purple-700"
@@ -281,7 +246,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Lista de tareas agrupadas por fecha */}
         {error ? (
           <p className="text-red-500 text-center">{error}</p>
         ) : Object.keys(groupedTasks).every(
@@ -311,11 +275,10 @@ const Home = () => {
         )}
       </div>
 
-      {/* Modal para crear tarea */}
+      {/* Modal de creación */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-4">
-            {/* Encabezado del modal */}
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold text-gray-800">
                 Crear nueva tarea
@@ -341,8 +304,16 @@ const Home = () => {
               </button>
             </div>
 
-            {/* Formulario para crear tarea */}
             <form onSubmit={handleCreateTask} className="space-y-4">
+              {alert && (
+                <div className="mb-4">
+                  <Alert
+                    type={alert.type}
+                    message={alert.message}
+                    onClose={closeAlert}
+                  />
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Título
@@ -352,9 +323,17 @@ const Home = () => {
                   name="title"
                   value={newTask.title}
                   onChange={handleInputChange}
-                  required
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                    validationErrors.title
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:ring-blue-500"
+                  }`}
                 />
+                {validationErrors.title && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {validationErrors.title[0]}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -377,9 +356,17 @@ const Home = () => {
                   name="deadline"
                   value={newTask.deadline}
                   onChange={handleInputChange}
-                  required
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                    validationErrors.deadline
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:ring-blue-500"
+                  }`}
                 />
+                {validationErrors.deadline && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {validationErrors.deadline[0]}
+                  </p>
+                )}
               </div>
               <div className="flex items-center">
                 <input
@@ -393,16 +380,6 @@ const Home = () => {
                   Marcar como completada
                 </label>
               </div>
-
-              {/* Mensajes de éxito o error */}
-              {successMessage && (
-                <p className="text-green-500 text-sm">{successMessage}</p>
-              )}
-              {errorMessage && (
-                <p className="text-red-500 text-sm">{errorMessage}</p>
-              )}
-
-              {/* Botones del formulario */}
               <div className="mt-6 flex justify-end space-x-3">
                 <button
                   type="button"

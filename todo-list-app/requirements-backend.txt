@@ -22,32 +22,36 @@ mysql>=5.7
 # 4. Git (para clonar el repositorio)
 git
 
+# 5. XAMPP 
+
 
 # Instrucciones para instalar y correr el backend:
 # 1. Clona el repositorio:
      git clone https://github.com/Nancy-Ramirez/to_do_list_app.git
-     cd to_do_list_app
 
-# 2. Navega al directorio del backend (importante: los siguientes comandos deben ejecutarse desde este directorio):
+# 2. Abrir en Visual Studio Code
+
+# 3. Navega al directorio del backend (importante: los siguientes comandos deben ejecutarse desde este directorio):
      cd todo-list-app
 
-# 3. Instala las dependencias con Composer:
+# 4. Instala las dependencias con Composer:
      composer install
 
-# 4. Copia el archivo de entorno:
+# 5. Copia el archivo de entorno:
      cp .env.example .env
 
-# 5. Ejecuta XAMPP
+# 6. Ejecuta XAMPP
 
-# 6. Configura tu base de datos en .env (DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD)
+# 7. Configura tu base de datos en .env (DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD)
+#?   Ir a php/myadmin y crear la base
      Nombre de la base a crear: todo_list
      DB_PORT (sugerido) = 3306 (si es diferente, cambiar en .env)
 
-# 7. Genera la clave de la aplicación:
+# 8. Genera la clave de la aplicación:
      php artisan key:generate
 
-# 8. Ejecuta las migraciones:
+# 9. Ejecuta las migraciones:
     php artisan migrate
 
-# 9. Inicia el servidor del backend:
-    php artisan servecd..
+# 10. Inicia el servidor del backend:
+    php artisan serve

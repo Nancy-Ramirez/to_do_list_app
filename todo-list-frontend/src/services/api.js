@@ -8,7 +8,8 @@ export const fetchTasks = async () => {
     },
   });
   if (!response.ok) {
-    throw new Error('Error al obtener las tareas');
+    const errorData = await response.json();
+    throw new Error(errorData.message || `Error al obtener las tareas: ${response.status}`);
   }
   return response.json();
 };
@@ -21,7 +22,8 @@ export const fetchTask = async (id) => {
     },
   });
   if (!response.ok) {
-    throw new Error('Error al obtener la tarea');
+    const errorData = await response.json();
+    throw new Error(errorData.message || `Error al obtener la tarea: ${response.status}`);
   }
   return response.json();
 };
@@ -37,10 +39,13 @@ export const createTask = async (task) => {
     body: JSON.stringify(task),
   });
   if (!response.ok) {
-    throw new Error('Error al crear la tarea');
+    const errorData = await response.json();
+    const error = new Error(errorData.message || `Error al crear la tarea: ${response.status}`);
+    error.response = { status: response.status, data: errorData }; // Adjuntamos la respuesta completa
+    throw error;
   }
   const data = await response.json();
-  return data.task; // Ajustar para devolver solo la tarea, si el backend lo permite
+  return data.task;
 };
 
 // Actualizar una tarea
@@ -54,10 +59,13 @@ export const updateTask = async (id, task) => {
     body: JSON.stringify(task),
   });
   if (!response.ok) {
-    throw new Error('Error al actualizar la tarea');
+    const errorData = await response.json();
+    const error = new Error(errorData.message || `Error al actualizar la tarea: ${response.status}`);
+    error.response = { status: response.status, data: errorData }; // Adjuntamos la respuesta completa
+    throw error;
   }
   const data = await response.json();
-  return data.task; // Ajustar para devolver solo la tarea
+  return data.task;
 };
 
 // Eliminar una tarea
@@ -69,22 +77,24 @@ export const deleteTask = async (id) => {
     },
   });
   if (!response.ok) {
-    throw new Error('Error al eliminar la tarea');
+    const errorData = await response.json();
+    throw new Error(errorData.message || `Error al eliminar la tarea: ${response.status}`);
   }
-  return response.json();
+  return true; // No hay cuerpo en la respuesta (204 No Content)
 };
 
 // Alternar el estado de completado
 export const toggleTaskComplete = async (id) => {
-  const response = await fetch(`${API_URL}/tasks/${id}/toggle`, {
-    method: 'PATCH',
+  const response = await fetch(`${API_URL}/tasks/${id}/toggle-complete`, {
+    method: 'PUT',
     headers: {
       'Accept': 'application/json',
     },
   });
   if (!response.ok) {
-    throw new Error('Error al alternar el estado de la tarea');
+    const errorData = await response.json();
+    throw new Error(errorData.message || `Error al alternar el estado de la tarea: ${response.status}`);
   }
   const data = await response.json();
-  return data.task; // Devolver solo la tarea actualizada
+  return data.task;
 };
