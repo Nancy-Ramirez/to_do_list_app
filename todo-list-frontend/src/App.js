@@ -1,7 +1,6 @@
-// todo-list-frontend/src/App.jsx
 
 import React from 'react';
-import Home from './pages/Home.jsx'; // Cambia .js a .jsx
+import Home from './pages/Home.jsx'; 
 
 function App() {
   return (
