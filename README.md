@@ -58,12 +58,12 @@ Asegurate de que los módulos de Apache y MySQL estén corriendo.
 - Abre `phpMyAdmin` (normalmente en http://localhost/phpmyadmin).
 - Crea una base de datos llamada todo_list.
 - Edita .env con los detalles de tu base de datos.
-  `DB_CONNECTION=mysql`
-  `DB_HOST=127.0.0.1`
-  `DB_PORT=3306`
-  `DB_DATABASE=todo_list`
-  `DB_USERNAME=root`
-  `DB_PASSWORD=`
+  - `DB_CONNECTION=mysql`
+  - `DB_HOST=127.0.0.1`
+  - `DB_PORT=3306`
+  - `DB_DATABASE=todo_list`
+  - `DB_USERNAME=root`
+  - `DB_PASSWORD=`
 Ajusta DB_USERNAME y DB_PASSWORD según tu configuración de MySQL).
 
 #### 6. Genera la clave de la aplicación:
