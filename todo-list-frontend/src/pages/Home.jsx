@@ -27,6 +27,8 @@ const Home = () => {
   const showAlert = (type, message) => setAlert({ type, message });
   const closeAlert = () => setAlert(null);
 
+
+//! Modificación para agrupar de manera correcta
   const groupTasksByDeadline = useCallback((tasksToGroup) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -34,31 +36,56 @@ const Home = () => {
     tomorrow.setDate(today.getDate() + 1);
     const endOfWeek = new Date(today);
     endOfWeek.setDate(today.getDate() + 7);
-
+  
+    // Formateamos fechas como YYYY-MM-DD para comparación simple
+    const formatDate = (date) => date.toISOString().split("T")[0];
+    const todayStr = formatDate(today);
+    const tomorrowStr = formatDate(tomorrow);
+  
+    console.log("Hoy (formato):", todayStr);
+    console.log("Mañana (formato):", tomorrowStr);
+  
     const grouped = { Hoy: [], Mañana: [], "Esta semana": [], "Más adelante": [] };
     tasksToGroup.forEach((task) => {
+      // Aquí nos aseguramos de que task.deadline esté en formato YYYY-MM-DD
+      const deadlineStr = task.deadline instanceof Date ? formatDate(task.deadline) : task.deadline.split("T")[0];
       const deadline = new Date(task.deadline);
       deadline.setHours(0, 0, 0, 0);
-      if (deadline.getTime() === today.getTime()) grouped["Hoy"].push(task);
-      else if (deadline.getTime() === tomorrow.getTime()) grouped["Mañana"].push(task);
-      else if (deadline > tomorrow && deadline <= endOfWeek) grouped["Esta semana"].push(task);
-      else grouped["Más adelante"].push(task);
+  
+      console.log("Tarea:", task.title, "Deadline (original):", task.deadline, "Deadline (formato):", deadlineStr);
+  
+      if (deadlineStr === todayStr) {
+        grouped["Hoy"].push(task);
+        console.log(`Asignada a Hoy: ${task.title}`);
+      } else if (deadlineStr === tomorrowStr) {
+        grouped["Mañana"].push(task);
+        console.log(`Asignada a Mañana: ${task.title}`);
+      } else if (deadline > tomorrow && deadline <= endOfWeek) {
+        grouped["Esta semana"].push(task);
+        console.log(`Asignada a Esta semana: ${task.title}`);
+      } else {
+        grouped["Más adelante"].push(task);
+        console.log(`Asignada a Más adelante: ${task.title}`);
+      }
     });
-
+  
     Object.keys(grouped).forEach((group) => {
       let updatedGroup = [...grouped[group]];
-      if (sortOption === "completados-primero") 
+      if (sortOption === "completados-primero")
         updatedGroup.sort((a, b) => (b.completed ? 1 : -1) - (a.completed ? 1 : -1));
-      else if (sortOption === "pendientes-primero") 
+      else if (sortOption === "pendientes-primero")
         updatedGroup.sort((a, b) => (a.completed ? 1 : -1) - (b.completed ? 1 : -1));
-      else if (sortOption === "solo-completados") 
+      else if (sortOption === "solo-completados")
         updatedGroup = updatedGroup.filter((task) => task.completed);
-      else if (sortOption === "solo-pendientes") 
+      else if (sortOption === "solo-pendientes")
         updatedGroup = updatedGroup.filter((task) => !task.completed);
       grouped[group] = updatedGroup;
     });
+  
+    console.log("Grupos finales:", grouped);
     return grouped;
   }, [sortOption]);
+ //************************************************ */
 
   const updateTaskInList = (updatedTask) => 
     setTasks((prevTasks) => prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task)));
